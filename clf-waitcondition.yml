@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: 2010-09-09
+# Ref: myWaitHandle: https://cloudformation-waitcondition-us-east-1.s3.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-east-1%3A996526982388%3Astack/waitcondition1/2a4d77a0-b7be-11e9-8775-1204ddd846a2/myWaitHandle?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20190805T201823Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIAIIT3CWAIMJYUTISA%2F20190805%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=883a70aee41ef3b5d8a63136e2badbe85ea79f29b97ae93c894481e6aa3d7685
+# /tmp/a
+# {
+#   "Status" : "SUCCESS",
+#   "Reason" : "Configuration Complete",
+#   "UniqueId" : "ID1234",
+#   "Data" : "Application has completed configuration."
+# }
+# curl -T /tmp/a "https://cloudformation-waitcondition-us-east-1.s3.amazonaws.com/xxx"
+# curl -X PUT -H 'Content-Type:' --data-binary '{"Status" : "SUCCESS","Reason" : "Configuration Complete","UniqueId" : "ID1234","Data" : "Application has completed configuration."}' "https://cloudformation-waitcondition-test.s3.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-east-2%3A034017226601%3Astack%2Fstack-gosar-20110427004224-test-stack-with-WaitCondition--VEYW%2Fe498ce60-70a1-11e0-81a7-5081d0136786%2FmyWaitConditionHandle?Expires=1303976584&AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Signature=ik1twT6hpS4cgNAw7wyOoRejVoo%3D"
+# !GetAtt - myWaitCondition - Data  will be the content of /tmp/a
+
+Resources:
+  Ec2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      UserData: !Base64 
+        Ref: myWaitHandle
+      ImageId: ami-0b898040803850657
+      KeyName: jackkey
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: EC2-1st
+  myWaitHandle:
+    Type: 'AWS::CloudFormation::WaitConditionHandle'
+    Properties: {}
+  myWaitCondition:
+    Type: 'AWS::CloudFormation::WaitCondition'
+    DependsOn: Ec2Instance
+    Properties:
+      Handle: !Ref myWaitHandle
+      Timeout: '4500'
+  Ec2Instance2:
+    Type: 'AWS::EC2::Instance'
+    DependsOn: myWaitCondition
+    Properties:
+      UserData: !Base64 
+        'Fn::GetAtt':
+          - myWaitCondition
+          - Data
+      ImageId: ami-0b898040803850657
+      KeyName: jackkey
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: EC2-2nd
+Outputs:
+  ApplicationData:
+    Value: !GetAtt 
+      - myWaitCondition
+      - Data
+    Description: The data passed back as part of signalling the WaitCondition.
