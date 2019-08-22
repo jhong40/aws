@@ -1,0 +1,13 @@
+note:
+jenkins:
+
+#!/bin/bash -ex
+echo Port 443 >>/etc/ssh/sshd_config
+systemctl restart sshd 
+yum install -y java
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+rpm -import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+yum install -y jenkins
+systemctl start jenkins
+
+
