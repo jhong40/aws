@@ -1,0 +1,2 @@
+aws s3 ls
+aws s3 cp file s3://bucket1
