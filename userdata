@@ -1,17 +1,16 @@
-note:
-jenkins:
 
 #!/bin/bash -ex
 echo Port 443 >>/etc/ssh/sshd_config
 systemctl restart sshd 
+
+###### jenkins 
 yum install -y java
 wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 rpm -import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
 yum install -y jenkins
 systemctl start jenkins
 
-
-#chef
+######  chef
 wget https://packages.chef.io/files/stable/chefdk/4.3.13/el/8/chefdk-4.3.13-1.el7.x86_64.rpm
 rpm -Uvh chefdk-4.3.13-1.el7.x86_64.rpm
 
