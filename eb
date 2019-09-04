@@ -1,0 +1,16 @@
+python --version                                   #if 2.7, then install 3.7
+sudo yum install python37
+python3 --version
+curl -O https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py --user
+pip --version
+pip install awsebcli --upgrade --user
+eb --version
+
+
+####
+[ec2-user@ip-172-31-19-16 ~]$ pip --version
+pip 19.2.3 from /home/ec2-user/.local/lib/python3.7/site-packages/pip (python 3.7)
+
+[ec2-user@ip-172-31-19-16 ~]$ eb --version
+EB CLI 3.15.3 (Python 3.7.4)
