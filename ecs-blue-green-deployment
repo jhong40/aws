@@ -492,6 +492,25 @@ Resources:
 }
 
 
+#####
+aws elbv2 create-load-balancer --name bluegreen-alb --subnets subnet-8591a5cf subnet-c6ee8aa1  subnet-5bfc9f75 --security-groups sg-05a0170b9ed0dc5c9 --region us-east-1
+aws elbv2 create-target-group --name bluegreentarget1 --protocol HTTP --port 80 --target-type ip --vpc-id vpc-60d7671a --region us-east-1
+aws elbv2 create-listener --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:996526982388:loadbalancer/app/bluegreen-alb/0eab69cd3c3a081c --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37 --region us-east-1
+aws elbv2 create-listener --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:996526982388:loadbalancer/app/bluegreen-alb/2fa80911b16c97d1 --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/19a4a486e46ab147 --region us-east-1
+
+
+aws ecs create-cluster --cluster-name tutorial-bluegreen --region us-east-1
+cat fargate-task.json
+aws ecs register-task-definition --cli-input-json file://fargate-task.json --region us-east-1
+cat service-bluegreen.json  
+aws ecs create-service --cli-input-json file://service-bluegreen.json --region us-east-1
+
+
+aws deploy create-application --application-name tutorial-bluegreen --compute-platform ECS --region us-east-1
+aws elbv2 create-target-group --name bluegreentarget2 --protocol HTTP --port 80 --target-type ip --vpc-id vpc-60d7671a --region us-east-1
+cat tutorial-deployment-group.json
+aws deploy create-deployment-group --cli-input-json file://tutorial-deployment-group.json --region us-east-1
+cat appspec.yaml
 
 
 
