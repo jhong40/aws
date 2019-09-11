@@ -392,6 +392,109 @@ Resources:
 
 		
 
+[ec2-user@ip-172-31-16-61 ~]$ cat create-deployment.json
+{
+    "applicationName": "tutorial-bluegreen",
+    "deploymentGroupName": "tutorial-bluegreen-dg",
+    "revision": {
+        "revisionType": "S3",
+        "s3Location": {
+            "bucket": "myanthem",
+            "key": "appspec.yaml",
+            "bundleType": "YAML"
+        }
+    }
+
+
+[ec2-user@ip-172-31-16-61 ~]$ aws deploy create-deployment --cli-input-json file://create-deployment.json --region us-east-1
+{
+    "deploymentId": "d-VVAAPI5PO"
+}
+
+
+[ec2-user@ip-172-31-16-61 ~]$ aws deploy get-deployment-target --deployment-id "d-SLJI096PO"  --target-id tutorial-bluegreen:service-bluegreen --region us-east-1
+{
+    "deploymentTarget": {
+        "ecsTarget": {
+            "status": "Succeeded",
+            "lifecycleEvents": [
+                {
+                    "status": "Succeeded",
+                    "endTime": 1568240526.479,
+                    "startTime": 1568240526.04,
+                    "lifecycleEventName": "BeforeInstall"
+                },
+                {
+                    "status": "Succeeded",
+                    "endTime": 1568240670.215,
+                    "startTime": 1568240526.688,
+                    "lifecycleEventName": "Install"
+                },
+                {
+                    "status": "Succeeded",
+                    "endTime": 1568240670.887,
+                    "startTime": 1568240670.413,
+                    "lifecycleEventName": "AfterInstall"
+                },
+                {
+                    "status": "Succeeded",
+                    "endTime": 1568240671.936,
+                    "startTime": 1568240671.526,
+                    "lifecycleEventName": "BeforeAllowTraffic"
+                },
+                {
+                    "status": "Succeeded",
+                    "endTime": 1568240672.793,
+                    "startTime": 1568240672.161,
+                    "lifecycleEventName": "AllowTraffic"
+                },
+                {
+                    "status": "Succeeded",
+                    "endTime": 1568240673.842,
+                    "startTime": 1568240673.323,
+                    "lifecycleEventName": "AfterAllowTraffic"
+                }
+            ],
+            "targetId": "tutorial-bluegreen:service-bluegreen",
+            "taskSetsInfo": [
+                {
+                    "status": "ACTIVE",
+                    "pendingCount": 0,
+                    "targetGroup": {
+                        "name": "bluegreentarget1"
+                    },
+                    "trafficWeight": 0.0,
+                    "desiredCount": 1,
+                    "taskSetLabel": "Blue",
+                    "identifer": "ecs-svc/9223370468615972295",
+                    "runningCount": 1
+                },
+                {
+                    "status": "PRIMARY",
+                    "pendingCount": 0,
+                    "targetGroup": {
+                        "name": "bluegreentarget2"
+                    },
+                    "trafficWeight": 100.0,
+                    "desiredCount": 1,
+                    "taskSetLabel": "Green",
+                    "identifer": "ecs-svc/9223370468614248711",
+                    "runningCount": 1
+                }
+            ],
+            "deploymentId": "d-SLJI096PO",
+            "lastUpdatedAt": 1568240674.061,
+            "targetArn": "arn:aws:ecs:us-east-1:996526982388:service/service-bluegreen"
+        },
+        "deploymentTargetType": "ECSTarget"
+    }
+}
+
+
+
+
+
+
 
 
 
