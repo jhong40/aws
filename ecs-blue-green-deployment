@@ -1,0 +1,399 @@
+[ec2-user@client ~]$ aws elbv2 create-load-balancer --name bluegreen-alb --subnets subnet-8591a5cf subnet-c6ee8aa1  subnet-5bfc9f75 --security-groups sg-05a0170b9ed0dc5c9 --region us-east-1
+{
+    "LoadBalancers": [
+        {
+            "IpAddressType": "ipv4",
+            "VpcId": "vpc-60d7671a",
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:loadbalancer/app/bluegreen-alb/0eab69cd3c3a081c",
+            "State": {
+                "Code": "provisioning"
+            },
+            "DNSName": "bluegreen-alb-2057585858.us-east-1.elb.amazonaws.com",
+            "SecurityGroups": [
+                "sg-05a0170b9ed0dc5c9"
+            ],
+            "LoadBalancerName": "bluegreen-alb",
+            "CreatedTime": "2019-07-29T19:54:39.730Z",
+            "Scheme": "internet-facing",
+            "Type": "application",
+            "CanonicalHostedZoneId": "Z35SXDOTRQ7X7K",
+            "AvailabilityZones": [
+                {
+                    "SubnetId": "subnet-5bfc9f75",
+                    "ZoneName": "us-east-1d"
+                },
+                {
+                    "SubnetId": "subnet-8591a5cf",
+                    "ZoneName": "us-east-1a"
+                },
+                {
+                    "SubnetId": "subnet-c6ee8aa1",
+                    "ZoneName": "us-east-1c"
+                }
+            ]
+        }
+    ]
+}
+
+[ec2-user@client ~]$ aws elbv2 create-target-group --name bluegreentarget1 --protocol HTTP --port 80 --target-type ip --vpc-id vpc-60d7671a --region us-east-1
+{
+    "TargetGroups": [
+        {
+            "HealthCheckPath": "/",
+            "HealthCheckIntervalSeconds": 30,
+            "VpcId": "vpc-60d7671a",
+            "Protocol": "HTTP",
+            "HealthCheckTimeoutSeconds": 5,
+            "TargetType": "ip",
+            "HealthCheckProtocol": "HTTP",
+            "Matcher": {
+                "HttpCode": "200"
+            },
+            "UnhealthyThresholdCount": 2,
+            "HealthyThresholdCount": 5,
+            "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37",
+            "HealthCheckEnabled": true,
+            "HealthCheckPort": "traffic-port",
+            "Port": 80,
+            "TargetGroupName": "bluegreentarget1"
+        }
+    ]
+}
+
+[ec2-user@client ~]$ aws elbv2 create-listener --load-balancer-arn arn:aws:elasticloadbalancing:us-east-1:996526982388:loadbalancer/app/bluegreen-alb/0eab69cd3c3a081c --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37 --region us-east-1
+{
+    "Listeners": [
+        {
+            "Protocol": "HTTP",
+            "DefaultActions": [
+                {
+                    "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37",
+                    "Type": "forward"
+                }
+            ],
+            "LoadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:loadbalancer/app/bluegreen-alb/0eab69cd3c3a081c",
+            "Port": 80,
+            "ListenerArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:listener/app/bluegreen-alb/0eab69cd3c3a081c/10be359bc3b8cbee"
+        }
+    ]
+}
+
+[ec2-user@client ~]$ aws ecs create-cluster --cluster-name tutorial-bluegreen --region us-east-1
+{
+    "cluster": {
+        "status": "ACTIVE",
+        "statistics": [],
+        "tags": [],
+        "clusterName": "tutorial-bluegreen",
+        "registeredContainerInstancesCount": 0,
+        "pendingTasksCount": 0,
+        "runningTasksCount": 0,
+        "activeServicesCount": 0,
+        "clusterArn": "arn:aws:ecs:us-east-1:996526982388:cluster/tutorial-bluegreen"
+    }
+}
+
+[ec2-user@client ecs]$ cat fargate-task.json
+{
+    "family": "tutorial-task-def",
+        "networkMode": "awsvpc",
+        "containerDefinitions": [
+            {
+                "name": "sample-app",
+                "image": "httpd:2.4",
+                "portMappings": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 80,
+                        "protocol": "tcp"
+                    }
+                ],
+                "essential": true
+            }
+        ],
+        "requiresCompatibilities": [
+            "FARGATE"
+        ],
+        "cpu": "256",
+        "memory": "512",
+        "executionRoleArn": "arn:aws:iam::996526982388:role/ecsTaskExecutionRole"
+}
+
+
+[ec2-user@client ecs]$ aws ecs register-task-definition --cli-input-json file://fargate-task.json --region us-east-1
+{
+    "taskDefinition": {
+        "status": "ACTIVE",
+        "networkMode": "awsvpc",
+        "family": "tutorial-task-def",
+        "placementConstraints": [],
+        "requiresAttributes": [
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+            },
+            {
+                "name": "ecs.capability.task-eni"
+            }
+        ],
+        "cpu": "256",
+        "executionRoleArn": "arn:aws:iam::996526982388:role/ecsTaskExecutionRole",
+        "compatibilities": [
+            "EC2",
+            "FARGATE"
+        ],
+        "volumes": [],
+        "memory": "512",
+        "requiresCompatibilities": [
+            "FARGATE"
+        ],
+        "taskDefinitionArn": "arn:aws:ecs:us-east-1:996526982388:task-definition/tutorial-task-def:2",
+        "containerDefinitions": [
+            {
+                "environment": [],
+                "name": "sample-app",
+                "mountPoints": [],
+                "image": "httpd:2.4",
+                "cpu": 0,
+                "portMappings": [
+                    {
+                        "protocol": "tcp",
+                        "containerPort": 80,
+                        "hostPort": 80
+                    }
+                ],
+                "essential": true,
+                "volumesFrom": []
+            }
+        ],
+        "revision": 2
+    }
+}
+
+
+[ec2-user@client ecs]$ cat service-bluegreen.json
+{
+    "cluster": "tutorial-bluegreen",
+    "serviceName": "service-bluegreen",
+    "taskDefinition": "tutorial-task-def",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37",
+            "containerName": "sample-app",
+            "containerPort": 80
+        }
+    ],
+    "launchType": "FARGATE",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "platformVersion": "LATEST",
+    "networkConfiguration": {
+       "awsvpcConfiguration": {
+          "assignPublicIp": "ENABLED",
+          "securityGroups": [ "sg-05a0170b9ed0dc5c9" ],
+          "subnets": [ "subnet-5bfc9f75", "subnet-5bfc9f75" ]
+       }
+    },
+    "desiredCount": 1
+}
+
+
+[ec2-user@client ecs]$ aws ecs create-service --cli-input-json file://service-bluegreen.json --region us-east-1
+{
+    "service": {
+        "networkConfiguration": {
+            "awsvpcConfiguration": {
+                "subnets": [
+                    "subnet-5bfc9f75"
+                ],
+                "securityGroups": [
+                    "sg-05a0170b9ed0dc5c9"
+                ],
+                "assignPublicIp": "ENABLED"
+            }
+        },
+        "launchType": "FARGATE",
+        "enableECSManagedTags": false,
+        "loadBalancers": [
+            {
+                "containerName": "sample-app",
+                "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37",
+                "containerPort": 80
+            }
+        ],
+        "deploymentController": {
+            "type": "CODE_DEPLOY"
+        },
+        "desiredCount": 1,
+        "clusterArn": "arn:aws:ecs:us-east-1:996526982388:cluster/tutorial-bluegreen",
+        "serviceArn": "arn:aws:ecs:us-east-1:996526982388:service/service-bluegreen",
+        "deploymentConfiguration": {
+            "maximumPercent": 200,
+            "minimumHealthyPercent": 100
+        },
+        "createdAt": 1564432521.872,
+        "healthCheckGracePeriodSeconds": 0,
+        "schedulingStrategy": "REPLICA",
+        "placementConstraints": [],
+        "deployments": [],
+        "serviceName": "service-bluegreen",
+        "events": [],
+        "runningCount": 0,
+        "status": "ACTIVE",
+        "serviceRegistries": [],
+        "pendingCount": 0,
+        "platformVersion": "1.3.0",
+        "placementStrategy": [],
+        "propagateTags": "NONE",
+        "taskSets": [
+            {
+                "status": "PRIMARY",
+                "networkConfiguration": {
+                    "awsvpcConfiguration": {
+                        "subnets": [
+                            "subnet-5bfc9f75"
+                        ],
+                        "securityGroups": [
+                            "sg-05a0170b9ed0dc5c9"
+                        ],
+                        "assignPublicIp": "ENABLED"
+                    }
+                },
+                "computedDesiredCount": 1,
+                "launchType": "FARGATE",
+                "stabilityStatus": "STABILIZING",
+                "taskSetArn": "arn:aws:ecs:us-east-1:996526982388:task-set/tutorial-bluegreen/service-bluegreen/ecs-svc/9223370472422253935",
+                "pendingCount": 0,
+                "createdAt": 1564432521.872,
+                "loadBalancers": [
+                    {
+                        "containerName": "sample-app",
+                        "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget1/d7c7002be0190e37",
+                        "containerPort": 80
+                    }
+                ],
+                "stabilityStatusAt": 1564432521.872,
+                "scale": {
+                    "unit": "PERCENT",
+                    "value": 100.0
+                },
+                "runningCount": 0,
+                "updatedAt": 1564432521.872,
+                "platformVersion": "1.3.0",
+                "id": "ecs-svc/9223370472422253935",
+                "taskDefinition": "arn:aws:ecs:us-east-1:996526982388:task-definition/tutorial-task-def:2"
+            }
+        ],
+        "roleArn": "arn:aws:iam::996526982388:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+        "taskDefinition": "arn:aws:ecs:us-east-1:996526982388:task-definition/tutorial-task-def:2"
+    }
+}
+[ec2-user@client ecs]$
+
+
+[ec2-user@client ecs]$ aws deploy create-application --application-name tutorial-bluegreen --compute-platform ECS --region us-east-1
+{
+    "applicationId": "a0c39f06-2dde-4225-a20b-c75b3e6347e3"
+}
+
+
+[ec2-user@client ecs]$ aws elbv2 create-target-group --name bluegreentarget2 --protocol HTTP --port 80 --target-type ip --vpc-id vpc-60d7671a --region us-east-1
+{
+    "TargetGroups": [
+        {
+            "HealthCheckPath": "/",
+            "HealthCheckIntervalSeconds": 30,
+            "VpcId": "vpc-60d7671a",
+            "Protocol": "HTTP",
+            "HealthCheckTimeoutSeconds": 5,
+            "TargetType": "ip",
+            "HealthCheckProtocol": "HTTP",
+            "Matcher": {
+                "HttpCode": "200"
+            },
+            "UnhealthyThresholdCount": 2,
+            "HealthyThresholdCount": 5,
+            "TargetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:996526982388:targetgroup/bluegreentarget2/d4762bec01b9b0b2",
+            "HealthCheckEnabled": true,
+            "HealthCheckPort": "traffic-port",
+            "Port": 80,
+            "TargetGroupName": "bluegreentarget2"
+        }
+    ]
+}
+
+[ec2-user@client ecs]$ cat tutorial-deployment-group.json
+{
+   "applicationName": "tutorial-bluegreen",
+   "autoRollbackConfiguration": {
+      "enabled": true,
+      "events": [ "DEPLOYMENT_FAILURE" ]
+   },
+   "blueGreenDeploymentConfiguration": {
+      "deploymentReadyOption": {
+         "actionOnTimeout": "CONTINUE_DEPLOYMENT",
+         "waitTimeInMinutes": 0
+      },
+      "terminateBlueInstancesOnDeploymentSuccess": {
+         "action": "TERMINATE",
+         "terminationWaitTimeInMinutes": 5
+      }
+   },
+   "deploymentGroupName": "tutorial-bluegreen-dg",
+   "deploymentStyle": {
+      "deploymentOption": "WITH_TRAFFIC_CONTROL",
+      "deploymentType": "BLUE_GREEN"
+   },
+   "loadBalancerInfo": {
+      "targetGroupPairInfoList": [
+        {
+          "targetGroups": [
+             {
+                 "name": "bluegreentarget1"
+             },
+             {
+                 "name": "bluegreentarget2"
+             }
+          ],
+          "prodTrafficRoute": {
+              "listenerArns": [
+                  "arn:aws:elasticloadbalancing:us-east-1:996526982388:listener/app/bluegreen-alb/6ad93816f66b6905/a488e50d6f30fd5f"
+              ]
+          }
+        }
+      ]
+   },
+   "serviceRoleArn": "arn:aws:iam::996526982388:role/ecsCodeDeployRole",
+   "ecsServices": [
+       {
+           "serviceName": "service-bluegreen",
+           "clusterName": "tutorial-bluegreen"
+       }
+   ]
+}
+[ec2-user@client ecs]$ aws deploy create-deployment-group --cli-input-json file://tutorial-deployment-group.json --region us-east-1
+{
+    "deploymentGroupId": "6ae30102-ea20-4a18-9772-3a549bdcd51f"
+}
+
+
+[ec2-user@client ecs]$ cat appspec.yaml
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:us-east-1:996526982388:task-definition/tutorial-task-def"
+        LoadBalancerInfo:
+          ContainerName: "sample-app"
+          ContainerPort: 80
+        PlatformVersion: "LATEST"
+
+		
+
+
+
+
+
+
