@@ -29,6 +29,13 @@ unzip terraform_0.12.9_linux_amd64.zip
 mv terraform /bin
 
 
+### docker
+sudo amazon-linux-extras install docker
+sudo systemctl start docker
+sudo usermod -a -G docker ec2-user
+reboot
+
+
 
 
 
