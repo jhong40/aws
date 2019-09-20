@@ -1,0 +1,19 @@
+timedatectl
+timedatectl list-timezones | grep New
+timedatectl set-timezone America/New_York
+[root@ip-172-31-31-233 etc]# timedatectl
+      Local time: Fri 2019-09-20 12:17:40 EDT
+  Universal time: Fri 2019-09-20 16:17:40 UTC
+        RTC time: Fri 2019-09-20 16:17:40
+       Time zone: America/New_York (EDT, -0400)
+     NTP enabled: yes
+NTP synchronized: no
+ RTC in local TZ: no
+      DST active: yes
+ Last DST change: DST began at
+                  Sun 2019-03-10 01:59:59 EST
+                  Sun 2019-03-10 03:00:00 EDT
+ Next DST change: DST ends (the clock jumps one hour backwards) at
+                  Sun 2019-11-03 01:59:59 EDT
+                  Sun 2019-11-03 01:00:00 EST
+
