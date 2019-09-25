@@ -7,4 +7,6 @@ github webhook: https://www.youtube.com/watch?v=PhxZamqYJws
 http://matt.might.net/articles/bash-by-example/ <b>
 ## perl 
   http://matt.might.net/articles/perl-by-example/ <b>
+## python RegEx
+  https://www.programiz.com/python-programming/regex
   
