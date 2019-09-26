@@ -43,6 +43,7 @@ sudo rpm -ihv jdk-8u131-linux-x64.rpm
 wget http://mirrors.advancedhosters.com/apache/tomcat/tomcat-8/v8.5.46/bin/apache-tomcat-8.5.46.tar.gz
 tar zxvf apache-tomcat-8.5.46.tar.gz
  
+ 
 
 
 
