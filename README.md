@@ -14,4 +14,6 @@ http://matt.might.net/articles/bash-by-example/ <b>
   jenkins and Maven https://jenkins.io/blog/2017/02/07/declarative-maven-project/
 ## install Oracle JDK
   https://stackoverflow.com/questions/10268583/downloading-java-jdk-on-linux-via-wget-is-shown-license-page-instead
+  sudo /usr/sbin/alternatives --config java
+ 
   
