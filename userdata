@@ -36,6 +36,13 @@ sudo systemctl start docker
 sudo usermod -a -G docker ec2-user
 reboot
 
+## Oracle JDK / Tomcat
+wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm
+sudo rpm -ihv jdk-8u131-linux-x64.rpm
+#sudo /usr/sbin/alternatives --config java
+wget http://mirrors.advancedhosters.com/apache/tomcat/tomcat-8/v8.5.46/bin/apache-tomcat-8.5.46.tar.gz
+tar zxvf apache-tomcat-8.5.46.tar.gz
+ 
 
 
 
