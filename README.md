@@ -11,4 +11,5 @@ http://matt.might.net/articles/bash-by-example/ <b>
   https://www.programiz.com/python-programming/regex
 ## maven jee build 
   https://github.com/Yavin/maven-ear-example/blob/master/pom.xml
+  jenkins and Maven https://jenkins.io/blog/2017/02/07/declarative-maven-project/
   
