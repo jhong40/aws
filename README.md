@@ -12,4 +12,6 @@ http://matt.might.net/articles/bash-by-example/ <b>
 ## maven jee build 
   https://github.com/Yavin/maven-ear-example/blob/master/pom.xml
   jenkins and Maven https://jenkins.io/blog/2017/02/07/declarative-maven-project/
+## install Oracle JDK
+  https://stackoverflow.com/questions/10268583/downloading-java-jdk-on-linux-via-wget-is-shown-license-page-instead
   
