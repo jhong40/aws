@@ -46,9 +46,15 @@ tar zxvf apache-tomcat-8.5.46.tar.gz
 ## WAS Liberty
 curl -O http://repo1.maven.org/maven2/com/ibm/websphere/appserver/runtime/wlp-javaee8/19.0.0.7/wlp-javaee8-19.0.0.7.zip
 
-echo "PATH=/opt/websphere/wlp/bin:$PATH" >> ~/.bashrc
+unzip wlp-javaee8-19.0.0.7.zip -d /opt/
+mkdir -p ~/liberty/servers
+echo "PATH=/opt/wlp/bin:$PATH" >> ~/.bashrc
 echo "export WLP_USER_DIR=~/liberty" >> ~/.bashrc
 source ~/.bashrc
+installUtility install servlet-3.1
+https://github.com/WASdev/sample.servlet/releases/download/V1/DefaultServletEngine.zip
+unzip DefaultServletEngine.zip -d ~/liberty/servers
+server run DefaultServletEngine
 
 
  
