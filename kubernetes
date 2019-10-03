@@ -2,3 +2,43 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s http
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.16.0/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 mv ./kubectl /usr/local/bin/kubectl
+
+
+ubunto
+
+    apt-get update
+    apt install -y docker.io
+    systemctl start docker
+    docker --version
+    docker pull ubuntu
+    docker images
+   hostnamectl set-hostname master
+    apt-get update
+    apt-get install -y apt-transport-https
+   curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+   cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+    
+   apt-get install -y kubelet kubeadm kubectl
+   swapoff -a
+   kubeadm init --pod-network-cidr=172.31.0.0/16 --ignore-preflight-errors=all   
+   
+   switch to regular user
+      
+   kubectl apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
+   
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+   kubeadm join 172.31.38.69:6443 --token nqpx03.f8dgwud1m1djlx3t \
+    --discovery-token-ca-cert-hash sha256:306b41f286a1c2e30c7ed1dae502da8c6262b9648537ba59bca37656738b580d
+    
+
+
+
+
+
+   
+
