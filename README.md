@@ -17,5 +17,6 @@ http://matt.might.net/articles/bash-by-example/ <b>
   sudo /usr/sbin/alternatives --config java
 ## ksh basic
   https://www.well.ox.ac.uk/~johnb/comp/unix/ksh.html#principle
+  http://www.bolthole.com/solaris/ksh.html
  
   
