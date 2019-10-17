@@ -2,6 +2,8 @@
 docker download
 http://mirrors.jenkins.io/
 github webhook: https://www.youtube.com/watch?v=PhxZamqYJws
+jenkins command line trigger: 
+http://www.inanzzz.com/index.php/post/jnrg/running-jenkins-jobs-via-command-line
 
 ## bash 
 http://matt.might.net/articles/bash-by-example/ <b>
