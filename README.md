@@ -1,3 +1,5 @@
+## wget
+https://www.computerhope.com/unix/wget.htm
 ## jenkins
 docker download
 http://mirrors.jenkins.io/
