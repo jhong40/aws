@@ -26,3 +26,6 @@ http://matt.might.net/articles/bash-by-example/ <b>
 ## python flask bootstrap
 https://github.com/mbr/flask-bootstrap
 
+## EKS workshop
+https://eksworkshop.com/
+
