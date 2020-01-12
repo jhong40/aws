@@ -1,0 +1,12 @@
+1. create IAM role with readonly permission for s3 and ec2
+2. install codedeploy agent
+3. config codedeploy app
+
+
+
+yum install ruby
+yum install wget
+wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+chmod +x install
+./install auto
+systemctl status codedeploy-agent
