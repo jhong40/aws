@@ -21,8 +21,11 @@ CMD /root/run_apache.sh
 docker build -t myapache .
 docker run -d -p 80:80 myapache
 aws ecr get-login --no-include-email --region us-east-1
-docker tag myapache ECR-DNS/repo-name
-docker push tag-name:version
+#docker tag myapache ECR-DNS/repo-name
+#docker push tag-name:version
+docker tag myapache 577535806498.dkr.ecr.us-east-1.amazonaws.com/myecr
+docker push 577535806498.dkr.ecr.us-east-1.amazonaws.com/myecr
+
 
 
 #if see error related with--no-include-email, update awscli
