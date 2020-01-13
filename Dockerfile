@@ -24,3 +24,8 @@ aws ecr get-login --no-include-email --region us-east-1
 docker tag myapache ECR-DNS/repo-name
 docker push tag-name:version
 
+
+#if see error related with--no-include-email, update awscli
+sudo apt install awscli
+sudo apt-get install python3-pip
+sudo pip3 install --upgrade awscli
