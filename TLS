@@ -35,3 +35,17 @@ DNS.1   = server1.abc.net
 DNS.2   = localhost 
 DNS.2   = 127.0.0.1
 
+#### Let's encrypt
+certbot certonly --standalone --preferred-challenges http -d www.xxx.com
+# creates privkey.pem, fullchain.pem  
+docker run -d \
+  --restart=always \
+  --name registry \
+  -v "$(pwd)"/certs:/certs \
+  -e REGISTRY_HTTP_ADDR=0.0.0.0:5000\
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  -p 5000:5000\
+  registry:2
+
+
