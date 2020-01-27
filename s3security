@@ -1,0 +1,18 @@
+s3 secure
+https://aws.amazon.com/premiumsupport/knowledge-center/secure-s3-resources/
+
+1. IAM policy (What can this user do in AWS?)
+2. S3 bucket Policy (Who can access this S3 bucket?)
+3. S3 block public access  
+4. S3 ACL ( Overcome IAM policy/bucket policy limit. IAM policy limit:2kb-user 5kb-group 10kb-role. S3 bucket policy: 20kb)  
+5. MFA delete / MFA-protected API access
+6. temporarily share an S3 object with another user, create a presigned URL to grant time-limited access to the object
+aws s3 presign s3://awsexamplebucket/test2.txt (--expires-in 604800  #default 1hour, with this --, valid for 1 week)
+https://examplebucket.s3.amazonaws.com/test2.txt?AWSAccessKeyId=AKIAEXAMPLEACCESSKEY&Signature=EXHCcBe%EXAMPLEKnz3r8O0AgEXAMPLE&Expires=1556132848
+7. Encryption for data at rest. 
+
+Monitor:
+1. CloudTrail
+2. S3 server access logging
+3. AWS Config to monitor violation: s3-bucket-public-read-prohibited and s3-bucket-public-write-prohibited
+
