@@ -36,6 +36,65 @@ EOF
     --discovery-token-ca-cert-hash sha256:306b41f286a1c2e30c7ed1dae502da8c6262b9648537ba59bca37656738b580d
     
 
+#HPA - Horizontal Pod AutoScaller
+kubectl run php-apache --image=k8s.gcr.io/hpa-example --requests=cpu=200m --expose --port=80
+kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
+kubectl get hpa
+#trigger load
+kubectl run -i --tty load-generator --image=busybox /bin/sh
+while true; do wget -q -O - http://php-apache; done
+#see action
+kubectl get hpa -w
+
+#CA - Cluster AutoScaller (CA)
+wget https://eksworkshop.com/beginner/080_scaling/deploy_ca.files/cluster_autoscaler.yml
+#cluster_autoscaler.yml
+#get to ASG in AWS to find ASG name: my-asg-group1, min/max: 2/8
+command:
+  - ./cluster-autoscaler
+  - --v=4
+  - --stderrthreshold=info
+  - --cloud-provider=aws
+  - --skip-nodes-with-local-storage=false
+  - --nodes=2:8:my-asg-group1
+env:
+  - name: AWS_REGION
+    value: us-east-1
+#create IAM policy
+mkdir ~/environment/asg_policy
+cat <<EoF > ~/environment/asg_policy/k8s-asg-policy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:DescribeAutoScalingInstances",
+        "autoscaling:SetDesiredCapacity",
+        "autoscaling:TerminateInstanceInAutoScalingGroup",
+        "autoscaling:DescribeTags"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EoF
+aws iam put-role-policy --role-name $ROLE_NAME --policy-name ASG-Policy-For-Worker --policy-document file://~/environment/asg_policy/k8s-asg-policy.json
+#validate the plicy is attached to the role
+aws iam get-role-policy --role-name $ROLE_NAME --policy-name ASG-Policy-For-Worker
+#deploy autoscaler
+kubectl apply -f ~/environment/cluster-autoscaler/cluster_autoscaler.yml
+kubectl logs -f deployment/cluster-autoscaler -n kube-system
+
+
+
+
+ 
+
+
+
+
 
 
 
