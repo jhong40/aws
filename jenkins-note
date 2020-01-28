@@ -157,3 +157,29 @@ pipeline {
         }
     }
 }
+
+/* when   */
+// when { allOf { branch 'master'; environment name: 'DEPLOY_TO', value: 'production' } }
+//when { expression { return params.DEBUG_BUILD } } 
+//when { equals expected: 2, actual: currentBuild.number }
+//when { not { branch 'master' } }
+//when { triggeredBy 'SCMTrigger' }
+//when { triggeredBy 'TimerTrigger' }
+pipeline {
+    agent any
+    stages {
+        stage('Example Build') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('Example Deploy') {
+            when {
+                branch 'production'
+            }
+            steps {
+                echo 'Deploying'
+            }
+        }
+    }
+}
