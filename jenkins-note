@@ -15,6 +15,19 @@ BITBUCKET_COMMON_CREDS_USR - an additional variable containing the username comp
 
 BITBUCKET_COMMON_CREDS_PSW - an additional variable containing the password component only.
 */
+
+/* 
+//checkout code
+    stage('Checkout external proj') {
+        steps {
+            git branch: 'my_specific_branch',
+                credentialsId: 'my_cred_id',
+                url: 'ssh://git@test.com/proj/test_proj.git'
+
+            sh "ls -lat"
+        }
+    }
+*/
 pipeline {
     agent {
         // Define agent details here
