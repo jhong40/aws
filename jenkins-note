@@ -2,6 +2,19 @@
 /* credential helper method */
 /* two secret text credentials are assigned to separate environment variables to access Amazon Web Services (AWS). These credentials would have been configured in Jenkins with their respective credential IDs
 jenkins-aws-secret-key-id and jenkins-aws-secret-access-key.*/
+
+/*
+environment {
+    BITBUCKET_COMMON_CREDS = credentials('jenkins-bitbucket-common-creds')
+}
+this actually sets the following three environment variables:
+
+BITBUCKET_COMMON_CREDS - contains a username and a password separated by a colon in the format username:password.
+
+BITBUCKET_COMMON_CREDS_USR - an additional variable containing the username component only.
+
+BITBUCKET_COMMON_CREDS_PSW - an additional variable containing the password component only.
+*/
 pipeline {
     agent {
         // Define agent details here
@@ -14,6 +27,32 @@ pipeline {
         stage('Example stage 1') {
             steps {
                 // 
+            }
+        }
+        stage('Example stage 2') {
+            steps {
+                // 
+            }
+        }
+    }
+}
+/* ssh key, certificate  */
+pipeline {
+    agent {
+        // define agent details
+    }
+    stages {
+        stage('Example stage 1') {
+            steps {
+                withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'jenkins-ssh-key-for-abc', \
+                                                             keyFileVariable: 'SSH_KEY_FOR_ABC')]) {
+                  // 
+                }
+                withCredentials(bindings: [certificate(credentialsId: 'jenkins-certificate-for-xyz', \
+                                                       keystoreVariable: 'CERTIFICATE_FOR_XYZ', \
+                                                       passwordVariable: 'XYZ-CERTIFICATE-PASSWORD')]) {
+                  // 
+                }
             }
         }
         stage('Example stage 2') {
