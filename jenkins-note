@@ -1,3 +1,4 @@
+//* Declarative Pipeline
 /* trigger */
 pipeline {
     triggers {     cron('H */4 * * 1-5') }
@@ -236,3 +237,30 @@ pipeline {
         }
     }
 }
+
+//* Scripted Pipeline has if/then/else conditionals
+
+node {
+    stage('Example') {
+        if (env.BRANCH_NAME == 'master') {
+            echo 'I only execute on the master branch'
+        } else {
+            echo 'I execute elsewhere'
+        }
+    }
+}
+
+// groovy's exception handling
+node {
+    stage('Example') {
+        try {
+            sh 'exit 1'
+        }
+        catch (exc) {
+            echo 'Something failed, I should sound the klaxons!'
+            throw
+        }
+    }
+}
+
+
