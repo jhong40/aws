@@ -1,3 +1,4 @@
+/* trigger */
 pipeline {
     triggers {     cron('H */4 * * 1-5') }
     triggers { pollSCM('H */4 * * 1-5') }
@@ -27,6 +28,7 @@ pipeline {
     }
 }
 
+/* post */
 pipeline {
     agent any
     stages {
@@ -56,7 +58,7 @@ pipeline {
     }
 }
 
-# user input
+/* user input  */
 pipeline {
     agent any
     stages {
@@ -71,7 +73,6 @@ pipeline {
 
         stage('Sanity check') {
             steps {
-                ##################################################################3
                 input "Does the staging environment look ok?"   ##### ask user input
             }
         }
@@ -84,7 +85,7 @@ pipeline {
     }
 }
 
-# pipeline with script step
+/* pipeline with script step  */
 pipeline {
     agent any
     stages {
@@ -103,7 +104,7 @@ pipeline {
     }
 }
 
-## option to add time stamp
+/* option to add time stamp  */
 pipeline {
     options { timestamps() }  //adding timestamp
     agent {
@@ -126,7 +127,7 @@ pipeline {
     }
 }
 
-# parameter
+/* parameter  */
 pipeline {
     agent any
     parameters {
