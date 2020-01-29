@@ -1,2 +1,34 @@
 ECS access RDS
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-tutorial.html
+
+Task Definition
+  Task Definition Name (Family name)
+  Task Role (IAM -> AWS service RDS)
+  Network Mode (bridge, host, awsvpc, none)
+  Task excecution role ( (pull image, publish container log -> CloudWatch)
+  Task size (Mem/CPU)
+  Constraint (Task Placement)
+  Service Integraion (Enable App Mesh integration)
+  Log Router Integration (FireLens for ECS)
+  Volume
+  
+  Add Container 
+     Image   
+     Mem (Hard limit, Soft limit)
+     Port mappting 
+     HealthCheck (command-curl, interval, timeout, start perirod, retries)
+     Environment (CPU units, GPU, Essential, EntryPoint, Command, workdir, env vars)
+     Container Timeout (start timeout, stop timeout)
+     Network Settings ( disable networking, links, hostname, DNS servers, DNS search domain)
+     Storage and Logging (mount point, log config -> awslog/jasonfile)
+     Security (privileged, user)
+     Resource Limit (CPU, Core, filesize, locks)
+     Docker labels
+     
+     
+     
+     
+  
+  
+  
+  
