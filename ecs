@@ -17,6 +17,20 @@ https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive
     }]
   }]
 }
+{
+  "containerDefinitions": [{
+    "logConfiguration": [{
+      "logDriver": "splunk",
+      "options": {
+        "splunk-url": "https://cloud.splunk.com:8080"
+      },
+      "secretOptions": [{
+        "name": "splunk-token",
+        "valueFrom": "arn:aws:secretsmanager:region:aws_account_id:secret:secret_name-AbCdEf"
+      }]
+    }]
+  }]
+}
 
 Task Definition
   Task Definition Name (Family name)
