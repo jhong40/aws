@@ -1,6 +1,23 @@
 ECS access RDS
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-tutorial.html
 
+{
+  "containerDefinitions": [{
+    "secrets": [{
+      "name": "environment_variable_name",
+      "valueFrom": "arn:aws:secretsmanager:region:aws_account_id:secret:secret_name-AbCdEf"
+    }]
+  }]
+}
+{
+  "containerDefinitions": [{
+    "secrets": [{
+      "name": "environment_variable_name",
+      "valueFrom": "arn:aws:ssm:region:aws_account_id:parameter/parameter_name"
+    }]
+  }]
+}
+
 Task Definition
   Task Definition Name (Family name)
   Task Role (IAM -> AWS service RDS)
