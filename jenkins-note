@@ -1,3 +1,4 @@
+https://jenkins.io/doc/book/pipeline/syntax/#steps
 //* Declarative Pipeline
 /* credential helper method */
 /* two secret text credentials are assigned to separate environment variables to access Amazon Web Services (AWS). These credentials would have been configured in Jenkins with their respective credential IDs
