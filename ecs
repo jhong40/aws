@@ -55,8 +55,31 @@ Task Definition
      Security (privileged, user)
      Resource Limit (CPU, Core, filesize, locks)
      Docker labels
-     
-     
+Service
+  Launch Tyep: Fargat, EC2 
+  Task Definition: familiy name, revision (*)
+  Cluster name:  (*) 
+  Service name: given name
+  Service Type: Replica, Daemon
+  Number of tasks: 1
+  Minumum healthy percent: 100
+  Max percent: 200
+  Deployment (or type): Rolling update, Blue/Green deployment
+  Task placement: AZ balanced spread, BinPack, AZ balanced BinPack, One Task PerHost, Custom
+  -- Config Network
+  Health Check grace period: 5 (seconds) #ECS ignore the ELB healthcheck for 5 sec, give app a chance to come up.
+  Load balancing: None, ALB, ELB, Classic
+  Service IAM role:
+  Load balancer name: 
+  Container to Load balancer:
+    Container name: port: nginx 80:80 Add to load balancer
+  App Mesh (task has to config with App mesh)
+  Service discovery (optional)
+  -- Set Auto Scalling (optional)
+    Do not adjust the service's desired count
+    Config Service Auto Scalling to adjust service count
+    
+      
 appspec.yml for ECS
 
 version: 0.0
