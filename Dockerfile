@@ -17,6 +17,11 @@ EXPOSE 80
 
 CMD /root/run_apache.sh
 
+---
+FROM httpd:2.4
+COPY ./index.html /usr/local/apache2/htdocs/
+
+
 
 docker build -t myapache .
 docker run -d -p 80:80 myapache
