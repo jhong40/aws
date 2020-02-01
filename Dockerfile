@@ -32,3 +32,8 @@ docker push 577535806498.dkr.ecr.us-east-1.amazonaws.com/myecr
 sudo apt install awscli
 sudo apt-get install python3-pip
 sudo pip3 install --upgrade awscli
+
+
+#run docker as regular user, reboot
+sudo groupadd docker
+sudo usermod -aG docker $USER
