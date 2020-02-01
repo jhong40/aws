@@ -1,3 +1,17 @@
+#### ECS agent 
+
+#!/bin/bash
+echo "ECS_CLUSTER=MyCluster" >> /etc/ecs/ecs.config
+
+#!/bin/bash
+cat <<'EOF' >> /etc/ecs/ecs.config
+ECS_CLUSTER=MyCluster
+ECS_LOGLEVEL=debug
+EOF
+
+
+##### ECS secret
+
 ECS access RDS
 https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-tutorial.html
 
