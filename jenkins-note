@@ -10,6 +10,9 @@ https://docs.aws.amazon.com/codebuild/latest/userguide/jenkins-plugin.html
 https://aws.amazon.com/blogs/devops/setting-up-a-ci-cd-pipeline-by-integrating-jenkins-with-aws-codebuild-and-aws-codedeploy/
 
 //aws config, the the following to make git access to codecommit
+cd ~jenkins
+sudo -u jenkins aws configure
+
 sudo -u jenkins git config --global credential.helper '!aws codecommit credential-helper $@'
 sudo -u jenkins git config --global credential.useHttpPath true
 sudo -u jenkins git config --global user.email "me@mycompany.com"
