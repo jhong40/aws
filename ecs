@@ -119,10 +119,12 @@ Hooks:
   - BeforeAllowTraffic: "LambdaFunctionToValidateBeforeAllowingProductionTraffic"
   - AfterAllowTraffic: "LambdaFunctionToValidateAfterAllowingProductionTraffic"
      
-     
+# Terraform ECS Blue/Green Deployment
+https://github.com/gnokoheat/ecs-with-codepipeline-example-by-terraform
   
-  
+# Terraform ECS update Deployment
 https://github.com/catsby/ecs_loadbalancing_demo/blob/master/alb/ecs_service.tf
+
 aws ecs register-task-definition --generate-cli-skeleton
 aws ecs register-task-definition --cli-input-json file://$HOME/tasks/fargate-task.json
 
