@@ -122,5 +122,13 @@ Hooks:
      
   
   
+https://github.com/catsby/ecs_loadbalancing_demo/blob/master/alb/ecs_service.tf
+aws ecs register-task-definition --generate-cli-skeleton
+aws ecs register-task-definition --cli-input-json file://$HOME/tasks/fargate-task.json
+
+aws ecs update-service --cluster CLUSTER --service SERVICE --force-new-deployment 
+aws ecs update-service --service my-http-service --task-definition amazon-ecs-sample
+aws ecs update-service --service my-http-service --desired-count 3
+  
   
   
