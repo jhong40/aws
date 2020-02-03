@@ -1,0 +1,29 @@
+#t.yml
+---
+  - name: Playbook
+    hosts: myhost
+    become: yes
+    become_user: root
+    gather_facts: yes
+    tasks:
+      - name: wait
+        wait_for_connection:
+      - name: ensure apache is at the latest version
+        yum:
+          name: httpd
+          state: latest
+      - name: ensure apache is running
+        service:
+          name: httpd
+          state: started
+
+
+#/etc/ansible/hosts
+[myhost]
+172.31.89.232 ansible_connection=ssh /home/ec2-users/ansible_ssh_private_key_file=keyprot.key ansible_port=443
+
+ansible-playbook t.yml
+
+ansible all -m ping    #all means all hosts
+ansible all -m shell -a 'yum install nginx'
+
