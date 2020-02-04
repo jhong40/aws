@@ -29,4 +29,30 @@ aws ec2 create-tags --resources instance-id --tags Key=Name,Value=CodeDeployDemo
 aws ec2 create-tags --resources instance-id --tags Key=Name,Value=testInstance Key=Region,Value=West Key=Environment,Value=Beta
 aws ec2 describe-instance-status --instance-ids instance-id --query "InstanceStatuses[*].InstanceStatus.[Status]" --output text 
 
+
+# codedeploy
+aws deploy create-deployment-config --deployment-config-name ThreeQuartersHealthy --minimum-healthy-hosts type=FLEET_PERCENT,value=75
+
+# autoscalling group
+aws autoscaling create-launch-configuration \
+  --launch-configuration-name CodeDeployDemo-AS-Configuration \
+  --image-id image-id \
+  --key-name key-name \
+  --iam-instance-profile CodeDeployDemo-EC2-Instance-Profile \
+  --instance-type t1.micro \ 
+  --user-data file://path/to/instance-setup.sh
+  
+aws autoscaling create-auto-scaling-group \
+  --auto-scaling-group-name CodeDeployDemo-AS-Group \
+  --launch-configuration-name CodeDeployDemo-AS-Configuration \
+  --min-size 1 \
+  --max-size 1 \
+  --desired-capacity 1 \
+  --availability-zones availability-zone  
+  
+  aws ec2 describe-availability-zones --region us-west-2
+  aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names CodeDeployDemo-AS-Group --query "AutoScalingGroups[0].Instances[*].[HealthStatus, LifecycleState]" --output text
+  
+  
+
   
