@@ -1,0 +1,72 @@
+IAM role
+
+
+Service role  ######################
+# assume-role-policy-document: define the trust relation, who or region can assume this role
+# policy-arn: define the permission give access to EC2, EC2 Autoscaling, CloudWatch, ELB, SNS etc.
+
+# CodeDeployDemo-Trust.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": [
+                    "codedeploy.amazonaws.com"
+                    # to grant access to only some supported regions
+                    #"codedeploy.us-east-2.amazonaws.com",
+                    #"codedeploy.us-east-1.amazonaws.com",
+                    #"codedeploy.us-west-1.amazonaws.com",
+                ]
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+
+# this only build the trust
+aws iam create-role --role-name CodeDeployServiceRole --assume-role-policy-document file://CodeDeployDemo-Trust.json
+
+# attach the policy to give access to EC2, EC2 Autoscaling, CloudWatch, ELB, SNS etc.
+aws iam attach-role-policy --role-name CodeDeployServiceRole --policy-arn arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+
+
+EC2-Instance-Role  ########################
+# CodeDeployDemo-EC2-Trust.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+# CodeDeployDemo-EC2-Permissions.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
+
+
+aws iam create-role --role-name CodeDeployDemo-EC2-Instance-Profile --assume-role-policy-document file://CodeDeployDemo-EC2-Trust.json
+aws iam put-role-policy --role-name CodeDeployDemo-EC2-Instance-Profile --policy-name CodeDeployDemo-EC2-Permissions --policy-document file://CodeDeployDemo-EC2-Permissions.json
+aws iam create-instance-profile --instance-profile-name CodeDeployDemo-EC2-Instance-Profile
+aws iam add-role-to-instance-profile --instance-profile-name CodeDeployDemo-EC2-Instance-Profile --role-name CodeDeployDemo-EC2-Instance-Profile
+
+
