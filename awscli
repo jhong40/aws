@@ -135,6 +135,22 @@ Failed
 aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names CodeDeployDemo-AS-Group --query "AutoScalingGroups[0].Instances[*].InstanceId" --output text
 # retun public dns name of ec2
 aws ec2 describe-instances --instance-id instance-id --query "Reservations[0].Instances[0].PublicDnsName" --output text
+
+aws autoscaling update-auto-scaling-group \
+  --auto-scaling-group-name CodeDeployDemo-AS-Group \
+  --min-size 2 \
+  --max-size 2 \
+  --desired-capacity 2
+  aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names CodeDeployDemo-AS-Group --query "AutoScalingGroups[0].Instances[*].[HealthStatus, LifecycleState]" --output text
+  
+  aws deploy list-deployments --application-name SimpleDemoApp --deployment-group-name SimpleDemoDG --query "deployments" --output text
+  aws deploy get-deployment --deployment-id deployment-id --query "deploymentInfo.[status, creator]" --output text
+  aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names CodeDeployDemo-AS-Group --query "AutoScalingGroups[0].Instances[*].InstanceId" --output text
+  aws ec2 describe-instances --instance-id instance-id --query "Reservations[0].Instances[0].PublicDnsName" --output text
+  
+  
+
+
   
 
   
