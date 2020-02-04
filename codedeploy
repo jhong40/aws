@@ -17,7 +17,7 @@ Deploy group name (given here)
 Service role
 Deployment Type: In-place / Blue-Green
 Environment Configuration:
-  In-place: ASG, EC2 instance, On-premmese
+  In-place: ASG group name, EC2 instance, On-premmese
   Blue-Green: Automatically Copy ASG / Manually provision instance
 Deployment Setting
   In-Place:
