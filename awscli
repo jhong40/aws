@@ -1,5 +1,32 @@
+s3 ##########################
 aws s3 ls
 aws s3 cp file s3://bucket1
 aws s3 cp --recursive templates/ "s3://${bucket}/templates" --acl public-read
 aws s3api put-bucket-versioning --bucket "${bucket}" --versioning-configuration Status=Enabled
 aws cloudformation deploy --stack-name $stackname --template-file ecs-blue-green-deployment.yaml --capabilities CAPABILITY_NAMED_IAM --parameter-overrides GitHubUser=$GitHubUser GitHubToken=$GitHubToken TemplateBucket=$bucket
+
+ec2 #########################
+aws ec2 run-instances \
+  --image-id ami-id \
+  --key-name key-name \
+  --user-data file://instance-setup.sh \
+  --count 1 \
+  --instance-type instance-type \
+  --iam-instance-profile Name=iam-instance-profile
+
+# instance-steup.sh
+#!/bin/bash
+yum -y update
+yum install -y ruby
+cd /home/ec2-user
+curl -O https://bucket-name.s3.amazonaws.com/latest/install
+chmod +x ./install
+./install auto
+
+aws ec2 run-instances --image-id ami-id --key-name key-name --user-data file://instance-setup.txt --count 1 --instance-type instance-type --iam-instance-profile Name=iam-instance-profile --security-groups CodeDeploy-Windows-Security-Group
+aws ec2 describe-instances --filters "Name=key-name,Values=keyName" --query "Reservations[*].Instances[*].[InstanceId]" --output text
+aws ec2 create-tags --resources instance-id --tags Key=Name,Value=CodeDeployDemo
+aws ec2 create-tags --resources instance-id --tags Key=Name,Value=testInstance Key=Region,Value=West Key=Environment,Value=Beta
+aws ec2 describe-instance-status --instance-ids instance-id --query "InstanceStatuses[*].InstanceStatus.[Status]" --output text 
+
+  
