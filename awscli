@@ -67,6 +67,73 @@ aws deploy create-deployment \
 aws deploy list-deployments --application-name SimpleDemoApp --deployment-group-name SimpleDemoDG --query "deployments" --output text
 aws deploy get-deployment --deployment-id deployment-id --query "deploymentInfo.status" --output text
 
+aws deploy list-deployments --application-name bluegreenec2 --deployment-group-name group1
+{
+    "deployments": [
+        "d-5EUZ5V5F2"
+    ]
+}
+
+aws deploy list-deployments --application-name bluegreenec2 --deployment-group-name group1 --query 'deployments' --output text
+d-5EUZ5V5F2
+
+aws deploy get-deployment --deployment-id d-5EUZ5V5F2 --query 'deploymentInfo.status' --output text
+Failed
+[ec2-user@ip-172-31-52-87 ~]$ aws deploy get-deployment --deployment-id d-5EUZ5V5F2
+{
+    "deploymentInfo": {
+        "applicationName": "bluegreenec2",
+        "status": "Failed",
+        "deploymentOverview": {
+            "Skipped": 0,
+            "Succeeded": 0,
+            "Failed": 1,
+            "Ready": 0,
+            "InProgress": 0,
+            "Pending": 0
+        },
+        "computePlatform": "Server",
+        "deploymentConfigName": "CodeDeployDefault.AllAtOnce",
+        "creator": "user",
+        "errorInformation": {
+            "message": "The overall deployment failed because too many individual instances failed deployment, too few healthy instances are available for deployment, or some instances in your deployment group are experiencing problems.",
+            "code": "HEALTH_CONSTRAINTS"
+        },
+        "fileExistsBehavior": "DISALLOW",
+        "loadBalancerInfo": {
+            "targetGroupInfoList": [
+                {
+                    "name": "bluegreentarget1"
+                }
+            ]
+        },
+        "deploymentId": "d-5EUZ5V5F2",
+        "deploymentStatusMessages": [],
+        "ignoreApplicationStopFailures": false,
+        "deploymentStyle": {
+            "deploymentType": "IN_PLACE",
+            "deploymentOption": "WITH_TRAFFIC_CONTROL"
+        },
+        "updateOutdatedInstancesOnly": false,
+        "rollbackInfo": {},
+        "instanceTerminationWaitTimeStarted": false,
+        "deploymentGroupName": "group1",
+        "createTime": 1580848980.898,
+        "completeTime": 1580849286.499,
+        "revision": {
+            "revisionType": "S3",
+            "s3Location": {
+                "bundleType": "zip",
+                "bucket": "aws-codedeploy-us-east-1",
+                "key": "samples/latest/SampleApp_Linux.zip"
+            }
+        }
+    }
+}
+
+
+
+
   
 
   
