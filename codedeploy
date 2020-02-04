@@ -22,7 +22,8 @@ Environment Configuration:
 Deployment Setting
   In-Place:
     Deployment configuration: CodeDeployDefault.AllAtOnce/OneAtAtime/HalfAtAtime
-    Loadbalancer: lbname
+    Loadbalancer: checkbox (enable or disable)
+    Target group: Name
   Blue-Green: 
     Traffice routing (Reroute traffice immediately / I will chose whether to reroute)
     Terminate Orig instances in deployment group ( for how long - days/hour/min) / Keep orig 
