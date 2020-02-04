@@ -29,10 +29,6 @@ aws ec2 create-tags --resources instance-id --tags Key=Name,Value=CodeDeployDemo
 aws ec2 create-tags --resources instance-id --tags Key=Name,Value=testInstance Key=Region,Value=West Key=Environment,Value=Beta
 aws ec2 describe-instance-status --instance-ids instance-id --query "InstanceStatuses[*].InstanceStatus.[Status]" --output text 
 
-
-# codedeploy
-aws deploy create-deployment-config --deployment-config-name ThreeQuartersHealthy --minimum-healthy-hosts type=FLEET_PERCENT,value=75
-
 # autoscalling group
 aws autoscaling create-launch-configuration \
   --launch-configuration-name CodeDeployDemo-AS-Configuration \
@@ -53,6 +49,24 @@ aws autoscaling create-auto-scaling-group \
   aws ec2 describe-availability-zones --region us-west-2
   aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names CodeDeployDemo-AS-Group --query "AutoScalingGroups[0].Instances[*].[HealthStatus, LifecycleState]" --output text
   
+# codedeploy
+aws deploy create-deployment-config --deployment-config-name ThreeQuartersHealthy --minimum-healthy-hosts type=FLEET_PERCENT,value=75
+aws deploy create-application --application-name SimpleDemoApp
+aws deploy create-deployment-group \
+  --application-name SimpleDemoApp \
+  --auto-scaling-groups CodeDeployDemo-AS-Group \
+  --deployment-group-name SimpleDemoDG \
+  --deployment-config-name CodeDeployDefault.OneAtATime \
+  --service-role-arn service-role-arn  
+aws deploy create-deployment \
+  --application-name SimpleDemoApp \
+  --deployment-config-name CodeDeployDefault.OneAtATime \
+  --deployment-group-name SimpleDemoDG \
+  --s3-location bucket=bucket-name,bundleType=zip,key=samples/latest/SampleApp_Linux.zip
+  
+aws deploy list-deployments --application-name SimpleDemoApp --deployment-group-name SimpleDemoDG --query "deployments" --output text
+aws deploy get-deployment --deployment-id deployment-id --query "deploymentInfo.status" --output text
+
   
 
   
