@@ -1,5 +1,6 @@
 ## ECS blue-green deployment
 https://github.com/aws-samples/ecs-blue-green-deployment
+https://github.com/devops-recipes/provision-ecs-cluster-terraform/blob/master/provision-cluster/application-load-balancer.tf
 ## wget
 https://www.computerhope.com/unix/wget.htm
 ## jenkins
