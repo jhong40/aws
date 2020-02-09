@@ -7,8 +7,10 @@ https://github.com/gnokoheat/ecs-with-codepipeline-example-by-terraform<br>
 
 https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-ecs-ecr-codedeploy.html#tutorials-ecs-ecr-codedeploy-deployment
 
-## Pipeline user guide
+## Pipeline user guide (imageDetail.json, imagedefinition.json)
 https://github.com/awsdocs/aws-codepipeline-user-guide/blob/master/doc_source/pipelines-create.md
+https://github.com/cloudposse/terraform-aws-ecs-codepipeline
+
 ## wget
 https://www.computerhope.com/unix/wget.htm
 ## jenkins
