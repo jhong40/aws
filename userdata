@@ -4,14 +4,12 @@ echo Port 443 >>/etc/ssh/sshd_config
 systemctl restart sshd 
 
 ### nodejs  https://github.com/nodesource/distributions/blob/master/README.md
-# As root
-curl -sL https://rpm.nodesource.com/setup_12.x | bash -
-curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash -
-
 ### nodejs https://tecadmin.net/install-latest-nodejs-amazon-linux/
 sudo yum install -y gcc-c++ make
 curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
 sudo yum install -y nodejs
+node -v
+npm -v
 
 
 ###### jenkins 
