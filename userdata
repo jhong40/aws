@@ -3,6 +3,13 @@
 echo Port 443 >>/etc/ssh/sshd_config
 systemctl restart sshd 
 
+### nodejs  https://github.com/nodesource/distributions/blob/master/README.md
+# As root
+curl -sL https://rpm.nodesource.com/setup_12.x | bash -
+# No root privileges 
+curl -sL https://rpm.nodesource.com/setup_12.x | sudo bash -
+
+
 ###### jenkins 
 yum install -y java
 wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
