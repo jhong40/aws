@@ -1,8 +1,9 @@
+###### EC2
+## kubectl install
 sudo curl --silent --location -o /usr/local/bin/kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl
 sudo chmod +x /usr/local/bin/kubectl
 
 sudo yum -y install jq gettext bash-completion
-
 for command in kubectl jq envsubst
   do
     which $command &>/dev/null && echo "$command in path" || echo "$command NOT FOUND"
@@ -12,8 +13,8 @@ kubectl completion bash >>  ~/.bash_completion
 . /etc/profile.d/bash_completion.sh
 . ~/.bash_completion
 
-# create IAM role with AdminitratorAccess  eksworkshop-admin
-# Attach it to Ec2
+## Create IAM role with AdminitratorAccess  eksworkshop-admin
+## Attach it to EC2
 
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query Account)
 export AWS_REGION=$(curl -s 169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')
@@ -36,7 +37,7 @@ ssh-keygen
 
 aws ec2 import-key-pair --key-name "eksworkshop" --public-key-material file://~/.ssh/id_rsa.pub
 
-####################################################
+####### Create EKS cluster
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv -v /tmp/eksctl /usr/local/bin
 
@@ -55,4 +56,87 @@ kubectl get nodes # if we see our 3 nodes, we know we have authenticated correct
 STACK_NAME=$(eksctl get nodegroup --cluster eksworkshop-eksctl -o json | jq -r '.[].StackName')
 ROLE_NAME=$(aws cloudformation describe-stack-resources --stack-name $STACK_NAME | jq -r '.StackResources[] | select(.ResourceType=="AWS::IAM::Role") | .PhysicalResourceId')
 echo "export ROLE_NAME=${ROLE_NAME}" | tee -a ~/.bash_profile
+
+####### Deploy Dashboard
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+## ???????
+kubectl proxy --port=8080 --address='0.0.0.0' --disable-filter=true &
+
+
+####### Deploy Sample Microservice
+
+cd ~/environment/ecsdemo-nodejs
+kubectl apply -f kubernetes/deployment.yaml
+kubectl apply -f kubernetes/service.yaml
+
+kubectl get deployment ecsdemo-nodejs
+
+
+
+cd ~/environment/ecsdemo-crystal
+kubectl apply -f kubernetes/deployment.yaml
+kubectl apply -f kubernetes/service.yaml
+
+kubectl get deployment ecsdemo-crystal
+
+## Create ELB Role
+aws iam get-role --role-name "AWSServiceRoleForElasticLoadBalancing" || aws iam create-service-linked-role --aws-service-name "elasticloadbalancing.amazonaws.com"
+
+cd ~/environment/ecsdemo-frontend
+kubectl apply -f kubernetes/deployment.yaml
+kubectl apply -f kubernetes/service.yaml
+
+kubectl get deployment ecsdemo-frontend
+kubectl get service ecsdemo-frontend
+kubectl get service ecsdemo-frontend -o wide
+
+ELB=$(kubectl get service ecsdemo-frontend -o json | jq -r '.status.loadBalancer.ingress[].hostname')
+curl -m3 -v $ELB
+
+kubectl get deployments
+kubectl scale deployment ecsdemo-nodejs --replicas=3
+kubectl scale deployment ecsdemo-crystal --replicas=3
+
+kubectl get deployments
+
+kubectl get deployments
+kubectl scale deployment ecsdemo-frontend --replicas=3
+kubectl get deployments
+
+
+cd ~/environment/ecsdemo-frontend
+kubectl delete -f kubernetes/service.yaml
+kubectl delete -f kubernetes/deployment.yaml
+
+cd ~/environment/ecsdemo-crystal
+kubectl delete -f kubernetes/service.yaml
+kubectl delete -f kubernetes/deployment.yaml
+
+cd ~/environment/ecsdemo-nodejs
+kubectl delete -f kubernetes/service.yaml
+kubectl delete -f kubernetes/deployment.yaml
+
+## Helm
+helm repo update
+helm search nginx
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm search bitnami
+
+helm search nginx
+helm search bitnami/nginx
+helm install --name mywebserver bitnami/nginx
+helm delete mywebserver
+
+
+
+
+
+
+
+
+
+
+
+
 
