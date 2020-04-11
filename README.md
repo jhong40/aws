@@ -23,7 +23,8 @@ http://www.inanzzz.com/index.php/post/jnrg/running-jenkins-jobs-via-command-line
 ## bash 
 rename many files with the same pattern <br>
 for f in *.jpg; do mv "$f" "$(echo "$f" | sed s/IMG/VACATION/)"; done <br>
-http://matt.might.net/articles/bash-by-example/ <b>
+http://matt.might.net/articles/bash-by-example/ <b> <br>
+http://www.cse.lehigh.edu/~brian/course/2013/cunix/handouts/bash.quickref.pdf <br>  
 ## perl 
   http://matt.might.net/articles/perl-by-example/ <b>
 ## python RegEx
