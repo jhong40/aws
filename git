@@ -1,0 +1,19 @@
+git add
+git commit -m "comment"
+git push origin
+git branch -a
+git checkout branch1
+
+# resolve conflict
+https://support.atlassian.com/bitbucket-cloud/docs/resolve-merge-conflicts/
+
+git checkout b1-1
+git pull origin b1
+# a.txt conflict
+# b.txt conflict
+# change a.txt,b.txt
+git add a.txt b.txt
+git commit -m "resolve conflict"
+git push origin b1-1
+
+
