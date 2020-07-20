@@ -9,6 +9,14 @@ https://support.atlassian.com/bitbucket-cloud/docs/resolve-merge-conflicts/
 
 git checkout b1-1
 git pull origin b1
+
+
+#git pull origin master --allow-unrelated-historiesFrom ssh://stash.addteq.com:7999/verizon/confluence-helm-chart
+# * branch            feature/VERIZON-1153-using-git-repository-as-helm-chart-repo -> FETCH_HEAD
+#fatal: refusing to merge unrelated histories
+
+# git pull origin b1 --allow-unrelated-histories
+
 # a.txt conflict
 # b.txt conflict
 # change a.txt,b.txt
